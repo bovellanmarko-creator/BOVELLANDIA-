@@ -15,7 +15,6 @@
 
         body {
             background-color: #0a0a0a;
-            /* Vinyylilevyn uria simuloiva tausta */
             background-image: radial-gradient(circle, transparent 20%, #000 20.5%, #000 21%, transparent 21.5%),
                               radial-gradient(circle, transparent 40%, #000 40.5%, #000 41%, transparent 41.5%);
             background-size: 10px 10px;
@@ -27,13 +26,13 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            padding: 20px;
         }
 
         .record-container {
             position: relative;
-            width: 90%;
+            width: 100%;
             max-width: 700px;
-            padding: 40px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -41,12 +40,12 @@
 
         /* Ylempi ympyrä (Kansi) */
         .cover-circle {
-            width: 350px;
-            height: 350px;
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
             border: 8px solid var(--gold);
             background: url('kansi.jpg') no-repeat center center/cover;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.4);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
             z-index: 2;
             position: relative;
             display: flex;
@@ -54,11 +53,10 @@
             align-items: center;
         }
 
-        /* Keskiöreikä */
         .cover-circle::after {
             content: '';
-            width: 25px;
-            height: 25px;
+            width: 20px;
+            height: 20px;
             background: #000;
             border-radius: 50%;
             border: 2px solid var(--gold);
@@ -66,15 +64,15 @@
 
         /* Alempi ympyrä (Soittolista) */
         .tracklist-circle {
-            width: 500px;
-            height: 500px;
+            width: 550px;
+            height: 550px;
             background: linear-gradient(145deg, var(--burgundy), #2a0505);
             border-radius: 50%;
             border: 4px solid var(--gold);
-            margin-top: -100px; /* Limitys */
+            margin-top: -80px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             text-align: center;
             box-shadow: 0 0 40px rgba(0,0,0,0.9);
@@ -84,88 +82,159 @@
         }
 
         .tracklist-circle h2 {
-            margin-top: 60px;
-            font-size: 1.8rem;
+            margin-top: 70px;
+            margin-bottom: 5px;
+            font-size: 1.6rem;
             color: var(--gold);
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
+        /* Skrollattava lista, jos lauluja on paljon */
+        .tracks-container {
+            width: 90%;
+            max-height: 320px;
+            overflow-y: auto;
+            margin-top: 10px;
+            padding-right: 10px;
+        }
+
+        /* Tyylitellään skrollipalkki */
+        .tracks-container::-webkit-scrollbar { width: 5px; }
+        .tracks-container::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
         .tracks {
             list-style: none;
             padding: 0;
-            width: 80%;
-            font-family: 'Special+Elite', monospace;
-            font-size: 0.9rem;
+            margin: 0;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.85rem;
         }
 
         .track-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 8px 5px;
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
             cursor: pointer;
-            transition: color 0.3s;
+            transition: all 0.3s;
         }
 
         .track-item:hover {
             color: var(--gold);
+            background: rgba(255,255,255,0.05);
         }
 
-        .play-icon {
-            margin-right: 10px;
+        .track-item.playing {
+            color: #fff;
+            background: rgba(197, 160, 89, 0.3);
+            font-weight: bold;
+        }
+
+        .lang-sep {
+            color: var(--gold);
             font-size: 0.7rem;
+            margin: 15px 0 5px 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--gold);
         }
 
-        /* Vinyylilevyn ulkoreuna (koriste taustalla) */
-        .vinyl-edge {
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            border-radius: 50%;
-            background: repeating-radial-gradient(
-                circle,
-                #111 0,
-                #111 2px,
-                #181818 3px,
-                #111 4px
-            );
-            z-index: 0;
-            opacity: 0.5;
-            pointer-events: none;
+        /* Piilotettu YouTube-soitin */
+        #youtube-player {
+            display: none;
         }
 
         @media (max-width: 600px) {
-            .cover-circle { width: 280px; height: 280px; }
-            .tracklist-circle { width: 350px; height: 350px; margin-top: -60px; }
+            .cover-circle { width: 200px; height: 200px; }
+            .tracklist-circle { width: 350px; height: 350px; padding: 20px; }
+            .tracklist-circle h2 { margin-top: 40px; font-size: 1.2rem; }
+            .tracks-container { max-height: 180px; }
             .tracks { font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="vinyl-edge"></div>
+    <div id="youtube-player"></div>
 
     <div class="record-container">
         <div class="cover-circle"></div>
 
         <div class="tracklist-circle">
             <h2>BOVELLANDIA</h2>
-            <p style="font-style: italic; color: var(--gold); margin-top: -10px;">Marjonetti</p>
+            <p style="font-style: italic; color: var(--gold); margin-top: -5px; font-size: 0.8rem;">Marjonetti Record</p>
             
-            <ul class="tracks">
-                <li class="track-item"><span><span class="play-icon">○</span> 1. Terapiaa</span> <span>4:12</span></li>
-                <li class="track-item"><span><span class="play-icon">○</span> 2. Täysihoito tarjolla</span> <span>3:45</span></li>
-                <li class="track-item"><span><span class="play-icon">○</span> 3. Taikaa</span> <span>5:01</span></li>
-                <li class="track-item"><span><span class="play-icon">○</span> 4. Narunpäät</span> <span>3:30</span></li>
-                <li class="track-item"><span><span class="play-icon">○</span> 5. Esirippu laskee</span> <span>3:15</span></li>
-                <li class="track-item"><span><span class="play-icon">○</span> 6. Karuselli pysähtyy</span> <span>4:58</span></li>
-                <li class="track-item"><span><span class="play-icon">○</span> 7. Meikki murtuu</span> <span>4:20</span></li>
-                <li class="track-item"><span><span class="play-icon">○</span> 8. Viimeinen kumarrus</span> <span>6:10</span></li>
-            </ul>
+            <div class="tracks-container">
+                <ul class="tracks" id="playlist">
+                    <li class="track-item" data-video="xW8jV8Z1wW8"><span>○ Kaaos</span></li>
+                    <li class="track-item" data-video="AVJ_M-gz8Vc"><span>○ Terapiaa</span></li>
+                    <li class="track-item" data-video="O__V_s4Xpw8"><span>○ Palveluksessanne</span></li>
+                    <li class="track-item" data-video="33WIOKXoWdg"><span>○ Taikaa</span></li>
+                    <li class="track-item" data-video="jHCAjpSsdeo"><span>○ Varjo</span></li>
+                    <li class="track-item" data-video="f7GtTkb-Klg"><span>○ Balanssiin</span></li>
+                    <li class="track-item" data-video="9MpoMPaDEK4"><span>○ Kreivin aikaan</span></li>
+                    <li class="track-item" data-video="FxQt3Pob-yY"><span>○ Facebook</span></li>
+                    <li class="track-item" data-video="A3e8_cNNUEI"><span>○ Toiselta kaiken</span></li>
+                    <li class="track-item" data-video="2WHciSE104c"><span>○ Juoni paljastuu</span></li>
+
+                    <div class="lang-sep">English</div>
+                    
+                    <li class="track-item" data-video="g91WbgdQ16A"><span>○ Magical night</span></li>
+                    <li class="track-item" data-video="o1yOIa2-hCQ"><span>○ Tourist</span></li>
+                </ul>
+            </div>
+            <p id="status-text" style="font-size: 0.7rem; color: var(--gold); margin-top: 10px;">Klikkaa laulua soittaaksesi</p>
         </div>
     </div>
 
+    <script>
+        var player;
+        
+        // Lataa YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: '', // Aluksi tyhjä
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0
+                },
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Kun klikataan kappaletta
+        const trackItems = document.querySelectorAll('.track-item');
+        trackItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const videoId = this.getAttribute('data-video');
+                const title = this.innerText;
+                
+                // Poista "playing" luokka muilta ja lisää tälle
+                trackItems.forEach(i => i.classList.remove('playing'));
+                this.classList.add('playing');
+                
+                // Vaihda video ja toista
+                player.loadVideoById(videoId);
+                document.getElementById('status-text').innerText = "Nyt toistetaan: " + title;
+            });
+        });
+
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.ENDED) {
+                document.getElementById('status-text').innerText = "Kappale päättyi. Valitse uusi.";
+                trackItems.forEach(i => i.classList.remove('playing'));
+            }
+        }
+    </script>
+
 </body>
 </html>
-
