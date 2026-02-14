@@ -38,7 +38,6 @@
             align-items: center;
         }
 
-        /* Ylempi ympyrä (Kansi) */
         .cover-circle {
             width: 300px;
             height: 300px;
@@ -62,7 +61,6 @@
             border: 2px solid var(--gold);
         }
 
-        /* Alempi ympyrä (Soittolista) */
         .tracklist-circle {
             width: 550px;
             height: 550px;
@@ -90,7 +88,6 @@
             letter-spacing: 2px;
         }
 
-        /* Skrollattava lista, jos lauluja on paljon */
         .tracks-container {
             width: 90%;
             max-height: 320px;
@@ -99,7 +96,6 @@
             padding-right: 10px;
         }
 
-        /* Tyylitellään skrollipalkki */
         .tracks-container::-webkit-scrollbar { width: 5px; }
         .tracks-container::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
 
@@ -114,7 +110,7 @@
         .track-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 5px;
+            padding: 12px 5px;
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
             cursor: pointer;
             transition: all 0.3s;
@@ -134,28 +130,34 @@
         .lang-sep {
             color: var(--gold);
             font-size: 0.7rem;
-            margin: 15px 0 5px 0;
+            margin: 20px 0 10px 0;
             text-transform: uppercase;
             border-bottom: 1px solid var(--gold);
+            width: 100%;
         }
 
-        /* Piilotettu YouTube-soitin */
-        #youtube-player {
-            display: none;
+        #youtube-player-container {
+            position: absolute;
+            top: -1000px;
+            left: -1000px;
+            opacity: 0;
+            pointer-events: none;
         }
 
         @media (max-width: 600px) {
-            .cover-circle { width: 200px; height: 200px; }
-            .tracklist-circle { width: 350px; height: 350px; padding: 20px; }
-            .tracklist-circle h2 { margin-top: 40px; font-size: 1.2rem; }
-            .tracks-container { max-height: 180px; }
-            .tracks { font-size: 0.7rem; }
+            .cover-circle { width: 220px; height: 220px; }
+            .tracklist-circle { width: 360px; height: 360px; padding: 20px; }
+            .tracklist-circle h2 { margin-top: 45px; font-size: 1.2rem; }
+            .tracks-container { max-height: 200px; }
+            .tracks { font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="youtube-player"></div>
+    <div id="youtube-player-container">
+        <div id="player"></div>
+    </div>
 
     <div class="record-container">
         <div class="cover-circle"></div>
@@ -183,58 +185,67 @@
                     <li class="track-item" data-video="o1yOIa2-hCQ"><span>○ Tourist</span></li>
                 </ul>
             </div>
-            <p id="status-text" style="font-size: 0.7rem; color: var(--gold); margin-top: 10px;">Klikkaa laulua soittaaksesi</p>
+            <p id="status-text" style="font-size: 0.7rem; color: var(--gold); margin-top: 10px;">Ladataan soitinta...</p>
         </div>
     </div>
 
     <script>
         var player;
-        
-        // Lataa YouTube API
+        var isPlayerReady = false;
+
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                height: '0',
-                width: '0',
-                videoId: '', // Aluksi tyhjä
+            player = new YT.Player('player', {
+                height: '200',
+                width: '200',
+                videoId: '',
                 playerVars: {
                     'autoplay': 0,
-                    'controls': 0
+                    'controls': 0,
+                    'disablekb': 1,
+                    'fs': 0,
+                    'rel': 0
                 },
                 events: {
+                    'onReady': onPlayerReady,
                     'onStateChange': onPlayerStateChange
                 }
             });
         }
 
-        // Kun klikataan kappaletta
+        function onPlayerReady(event) {
+            isPlayerReady = true;
+            document.getElementById('status-text').innerText = "Valmis! Klikkaa kappaletta soittaaksesi.";
+        }
+
         const trackItems = document.querySelectorAll('.track-item');
         trackItems.forEach(item => {
             item.addEventListener('click', function() {
+                if (!isPlayerReady) return;
+                
                 const videoId = this.getAttribute('data-video');
                 const title = this.innerText;
                 
-                // Poista "playing" luokka muilta ja lisää tälle
                 trackItems.forEach(i => i.classList.remove('playing'));
                 this.classList.add('playing');
                 
-                // Vaihda video ja toista
                 player.loadVideoById(videoId);
-                document.getElementById('status-text').innerText = "Nyt toistetaan: " + title;
+                player.playVideo();
+                
+                document.getElementById('status-text').innerText = "Nyt soi: " + title;
             });
         });
 
         function onPlayerStateChange(event) {
             if (event.data == YT.PlayerState.ENDED) {
-                document.getElementById('status-text').innerText = "Kappale päättyi. Valitse uusi.";
+                document.getElementById('status-text').innerText = "Kappale päättyi.";
                 trackItems.forEach(i => i.classList.remove('playing'));
             }
         }
     </script>
-
 </body>
 </html>
