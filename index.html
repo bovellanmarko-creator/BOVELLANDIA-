@@ -136,10 +136,7 @@
             width: 100%;
         }
 
-        /* Piilotetaan audio-elementti */
-        #audio-player {
-            display: none;
-        }
+        #audio-player { display: none; }
 
         @media (max-width: 600px) {
             .cover-circle { width: 220px; height: 220px; }
@@ -196,28 +193,25 @@
                 const songSrc = this.getAttribute('data-src');
                 const title = this.innerText;
 
-                // Jos sama biisi jo soi, laitetaan pauselle
+                // Tarkistetaan onko tämä jo soimassa
                 if (audio.src.includes(songSrc) && !audio.paused) {
                     audio.pause();
                     this.classList.remove('playing');
                     statusText.innerText = "Pysäytetty: " + title;
                 } else {
-                    // Poistetaan korostus muilta
                     trackItems.forEach(i => i.classList.remove('playing'));
                     this.classList.add('playing');
 
-                    // Vaihdetaan biisi ja soitetaan
                     audio.src = songSrc;
                     audio.play().catch(e => {
-                        console.error("Virhe: ", e);
-                        statusText.innerText = "Virhe: Tiedostoa ei löydy palvelimelta.";
+                        statusText.innerText = "Tiedostoa ladataan vielä...";
+                        console.log("Toistovirhe:", e);
                     });
                     statusText.innerText = "Nyt soi: " + title;
                 }
             });
         });
 
-        // Kun biisi loppuu
         audio.addEventListener('ended', () => {
             statusText.innerText = "Kappale päättyi.";
             trackItems.forEach(i => i.classList.remove('playing'));
