@@ -136,12 +136,9 @@
             width: 100%;
         }
 
-        #youtube-player-container {
-            position: absolute;
-            top: -1000px;
-            left: -1000px;
-            opacity: 0;
-            pointer-events: none;
+        /* Piilotetaan audio-elementti */
+        #audio-player {
+            display: none;
         }
 
         @media (max-width: 600px) {
@@ -155,9 +152,7 @@
 </head>
 <body>
 
-    <div id="youtube-player-container">
-        <div id="player"></div>
-    </div>
+    <audio id="audio-player"></audio>
 
     <div class="record-container">
         <div class="cover-circle"></div>
@@ -168,84 +163,65 @@
             
             <div class="tracks-container">
                 <ul class="tracks" id="playlist">
-                    <li class="track-item" data-video="xW8jV8Z1wW8"><span>○ Kaaos</span></li>
-                    <li class="track-item" data-video="AVJ_M-gz8Vc"><span>○ Terapiaa</span></li>
-                    <li class="track-item" data-video="O__V_s4Xpw8"><span>○ Palveluksessanne</span></li>
-                    <li class="track-item" data-video="33WIOKXoWdg"><span>○ Taikaa</span></li>
-                    <li class="track-item" data-video="jHCAjpSsdeo"><span>○ Varjo</span></li>
-                    <li class="track-item" data-video="f7GtTkb-Klg"><span>○ Balanssiin</span></li>
-                    <li class="track-item" data-video="9MpoMPaDEK4"><span>○ Kreivin aikaan</span></li>
-                    <li class="track-item" data-video="FxQt3Pob-yY"><span>○ Facebook</span></li>
-                    <li class="track-item" data-video="A3e8_cNNUEI"><span>○ Toiselta kaiken</span></li>
-                    <li class="track-item" data-video="2WHciSE104c"><span>○ Juoni paljastuu</span></li>
+                    <li class="track-item" data-src="Kaaos.mp3"><span>○ Kaaos</span></li>
+                    <li class="track-item" data-src="Terapiaa.mp3"><span>○ Terapiaa</span></li>
+                    <li class="track-item" data-src="Taysihoito_tarjolla.mp3"><span>○ Täysihoito tarjolla</span></li>
+                    <li class="track-item" data-src="Juoni_paljastuu.mp3"><span>○ Juoni paljastuu</span></li>
+                    <li class="track-item" data-src="Toiselta_kaiken.mp3"><span>○ Toiselta kaiken</span></li>
+                    <li class="track-item" data-src="Kreivin_aikaan.mp3"><span>○ Kreivin aikaan</span></li>
+                    <li class="track-item" data-src="Varjo.mp3"><span>○ Varjo</span></li>
+                    <li class="track-item" data-src="Facebook.mp3"><span>○ Facebook</span></li>
+                    <li class="track-item" data-src="Balanssiin.mp3"><span>○ Balanssiin</span></li>
+                    <li class="track-item" data-src="Han_sateilee.mp3"><span>○ Hän sateilee</span></li>
+                    <li class="track-item" data-src="Jaita.mp3"><span>○ Jäitä</span></li>
+                    <li class="track-item" data-src="Terapiaa_jazz.mp3"><span>○ Terapiaa (Jazz)</span></li>
 
-                    <div class="lang-sep">English</div>
+                    <div class="lang-sep">English & Other</div>
                     
-                    <li class="track-item" data-video="g91WbgdQ16A"><span>○ Magical night</span></li>
-                    <li class="track-item" data-video="o1yOIa2-hCQ"><span>○ Tourist</span></li>
+                    <li class="track-item" data-src="Magical_night.mp3"><span>○ Magical night</span></li>
+                    <li class="track-item" data-src="Lonely_Road.mp3"><span>○ Lonely Road</span></li>
                 </ul>
             </div>
-            <p id="status-text" style="font-size: 0.7rem; color: var(--gold); margin-top: 10px;">Ladataan soitinta...</p>
+            <p id="status-text" style="font-size: 0.7rem; color: var(--gold); margin-top: 10px;">Valitse laulu klikkaamalla</p>
         </div>
     </div>
 
     <script>
-        var player;
-        var isPlayerReady = false;
-
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '200',
-                width: '200',
-                videoId: '',
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'disablekb': 1,
-                    'fs': 0,
-                    'rel': 0
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            isPlayerReady = true;
-            document.getElementById('status-text').innerText = "Valmis! Klikkaa kappaletta soittaaksesi.";
-        }
-
+        const audio = document.getElementById('audio-player');
         const trackItems = document.querySelectorAll('.track-item');
+        const statusText = document.getElementById('status-text');
+
         trackItems.forEach(item => {
             item.addEventListener('click', function() {
-                if (!isPlayerReady) return;
-                
-                const videoId = this.getAttribute('data-video');
+                const songSrc = this.getAttribute('data-src');
                 const title = this.innerText;
-                
-                trackItems.forEach(i => i.classList.remove('playing'));
-                this.classList.add('playing');
-                
-                player.loadVideoById(videoId);
-                player.playVideo();
-                
-                document.getElementById('status-text').innerText = "Nyt soi: " + title;
+
+                // Jos sama biisi jo soi, laitetaan pauselle
+                if (audio.src.includes(songSrc) && !audio.paused) {
+                    audio.pause();
+                    this.classList.remove('playing');
+                    statusText.innerText = "Pysäytetty: " + title;
+                } else {
+                    // Poistetaan korostus muilta
+                    trackItems.forEach(i => i.classList.remove('playing'));
+                    this.classList.add('playing');
+
+                    // Vaihdetaan biisi ja soitetaan
+                    audio.src = songSrc;
+                    audio.play().catch(e => {
+                        console.error("Virhe: ", e);
+                        statusText.innerText = "Virhe: Tiedostoa ei löydy palvelimelta.";
+                    });
+                    statusText.innerText = "Nyt soi: " + title;
+                }
             });
         });
 
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.ENDED) {
-                document.getElementById('status-text').innerText = "Kappale päättyi.";
-                trackItems.forEach(i => i.classList.remove('playing'));
-            }
-        }
+        // Kun biisi loppuu
+        audio.addEventListener('ended', () => {
+            statusText.innerText = "Kappale päättyi.";
+            trackItems.forEach(i => i.classList.remove('playing'));
+        });
     </script>
 </body>
 </html>
