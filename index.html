@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bovellandia - Marjonetti Record</title>
+    <title>Bovellandia - Marionetti Record</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,7 +16,6 @@
 
         body {
             background-color: var(--dark-wood);
-            /* Vanhan ajan teksturoitu tausta */
             background-image: 
                 radial-gradient(circle, transparent 20%, rgba(0,0,0,0.4) 100%),
                 url('https://www.transparenttextures.com/patterns/dark-leather.png');
@@ -45,7 +44,6 @@
             border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        /* Neliön muotoinen kansi */
         .cover-art {
             flex: 1;
             aspect-ratio: 1 / 1;
@@ -65,7 +63,6 @@
             pointer-events: none;
         }
 
-        /* Soittolista-alue */
         .player-content {
             flex: 1;
             display: flex;
@@ -151,7 +148,6 @@
 
         audio { display: none; }
 
-        /* Mobiilioptimointi */
         @media (max-width: 768px) {
             .main-wrapper {
                 flex-direction: column;
@@ -179,23 +175,23 @@
             
             <div class="tracks-container">
                 <ul class="tracks">
-                    <li class="track-item" data-src="Kaaos.mp3"><span>01. Kaaos</span></li>
-                    <li class="track-item" data-src="Terapiaa.mp3"><span>02. Terapiaa</span></li>
-                    <li class="track-item" data-src="Taysihoito_tarjolla.mp3"><span>03. Täysihoito tarjolla</span></li>
+                    <li class="track-item" data-src="Terapiaa.mp3"><span>01. Terapiaa</span></li>
+                    <li class="track-item" data-src="Kaaos.mp3"><span>02. Kaaos</span></li>
+                    <li class="track-item" data-src="Terapiaa_jazz.mp3"><span>03. Terapiaa (Jazz)</span></li>
                     <li class="track-item" data-src="Juoni_paljastuu.mp3"><span>04. Juoni paljastuu</span></li>
                     <li class="track-item" data-src="Toiselta_kaiken.mp3"><span>05. Toiselta kaiken</span></li>
-                    <li class="track-item" data-src="Kreivin_aikaan.mp3"><span>06. Kreivin aikaan</span></li>
-                    <li class="track-item" data-src="Varjo.mp3"><span>07. Varjo</span></li>
-                    <li class="track-item" data-src="Facebook.mp3"><span>08. Facebook</span></li>
-                    <li class="track-item" data-src="Balanssiin.mp3"><span>09. Balanssiin</span></li>
-                    <li class="track-item" data-src="Han_sateilee.mp3"><span>10. Hän sateilee</span></li>
-                    <li class="track-item" data-src="Jaita.mp3"><span>11. Jäitä</span></li>
-                    <li class="track-item" data-src="Terapiaa_jazz.mp3"><span>12. Terapiaa (Jazz)</span></li>
+                    <li class="track-item" data-src="Jaita.mp3"><span>06. Jäitä</span></li>
+                    <li class="track-item" data-src="Kreivin_aikaan.mp3"><span>07. Kreivin aikaan</span></li>
+                    <li class="track-item" data-src="Taysihoito_tarjolla.mp3"><span>08. Täysihoito tarjolla</span></li>
+                    <li class="track-item" data-src="Varjo.mp3"><span>09. Varjo</span></li>
+                    <li class="track-item" data-src="Han_sateilee.mp3"><span>10. Hän säteilee</span></li>
+                    <li class="track-item" data-src="Facebook.mp3"><span>11. Facebook</span></li>
+                    <li class="track-item" data-src="Balanssiin.mp3"><span>12. Balanssiin</span></li>
 
                     <div class="lang-header">International Tracks</div>
                     
-                    <li class="track-item" data-src="Magical_night.mp3"><span>13. Magical night</span></li>
-                    <li class="track-item" data-src="Lonely_Road.mp3"><span>14. Lonely Road</span></li>
+                    <li class="track-item" data-src="Lonely_Road.mp3"><span>13. Lonely Road</span></li>
+                    <li class="track-item" data-src="Magical_night.mp3"><span>14. Magical night</span></li>
                 </ul>
             </div>
             
@@ -241,4 +237,3 @@
     </script>
 </body>
 </html>
-
