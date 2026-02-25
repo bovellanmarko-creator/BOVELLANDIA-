@@ -174,19 +174,19 @@
             <div class="subtitle">MARIONETTI RECORD • COLLECTOR'S EDITION</div>
             
             <div class="tracks-container">
-                <ul class="tracks">
-                    <li class="track-item" data-src="Terapiaa.mp3"><span>01. Terapiaa</span></li>
-                    <li class="track-item" data-src="Kaaos.mp3"><span>02. Kaaos</span></li>
-                    <li class="track-item" data-src="Terapiaa_jazz.mp3"><span>03. Terapiaa (Jazz)</span></li>
-                    <li class="track-item" data-src="Juoni_paljastuu.mp3"><span>04. Juoni paljastuu</span></li>
-                    <li class="track-item" data-src="Toiselta_kaiken.mp3"><span>05. Toiselta kaiken</span></li>
-                    <li class="track-item" data-src="Jaita.mp3"><span>06. Jäitä</span></li>
-                    <li class="track-item" data-src="Kreivin_aikaan.mp3"><span>07. Kreivin aikaan</span></li>
-                    <li class="track-item" data-src="Taysihoito_tarjolla.mp3"><span>08. Täysihoito tarjolla</span></li>
-                    <li class="track-item" data-src="Varjo.mp3"><span>09. Varjo</span></li>
-                    <li class="track-item" data-src="Han_sateilee.mp3"><span>10. Hän säteilee</span></li>
-                    <li class="track-item" data-src="Facebook.mp3"><span>11. Facebook</span></li>
-                    <li class="track-item" data-src="Balanssiin.mp3"><span>12. Balanssiin</span></li>
+                <ul class="tracks" id="playlist">
+                    <li class="track-item" data-src="Jaita.mp3"><span>01. Jäitä</span></li>
+                    <li class="track-item" data-src="Terapiaa.mp3"><span>02. Terapiaa</span></li>
+                    <li class="track-item" data-src="Varjo.mp3"><span>03. Varjo</span></li>
+                    <li class="track-item" data-src="Taysihoito_tarjolla.mp3"><span>04. Täysihoito tarjolla</span></li>
+                    <li class="track-item" data-src="Kreivin_aikaan.mp3"><span>05. Kreivin aikaan</span></li>
+                    <li class="track-item" data-src="Kaaos.mp3"><span>06. Kaaos</span></li>
+                    <li class="track-item" data-src="Juoni_paljastuu.mp3"><span>07. Juoni paljastuu</span></li>
+                    <li class="track-item" data-src="Balanssiin.mp3"><span>08. Balanssiin</span></li>
+                    <li class="track-item" data-src="Facebook.mp3"><span>09. Facebook</span></li>
+                    <li class="track-item" data-src="Toiselta_kaiken.mp3"><span>10. Toiselta kaiken</span></li>
+                    <li class="track-item" data-src="Han_sateilee.mp3"><span>11. Hän säteilee</span></li>
+                    <li class="track-item" data-src="Terapiaa_jazz.mp3"><span>12. Terapiaa (jazz)</span></li>
 
                     <div class="lang-header">International Tracks</div>
                     
@@ -195,7 +195,7 @@
                 </ul>
             </div>
             
-            <div id="status-display">Valitse kappale listalta...</div>
+            <div id="status-display">Valitse kappale...</div>
         </div>
     </div>
 
@@ -204,35 +204,54 @@
         const trackItems = document.querySelectorAll('.track-item');
         const statusDisplay = document.getElementById('status-display');
         const albumCover = document.getElementById('album-cover');
+        let currentTrackIndex = -1;
 
-        trackItems.forEach(item => {
+        function playTrack(index) {
+            if (index < 0 || index >= trackItems.length) return;
+            
+            currentTrackIndex = index;
+            const item = trackItems[index];
+            const songSrc = item.getAttribute('data-src');
+            const title = item.innerText;
+
+            trackItems.forEach(i => i.classList.remove('playing'));
+            item.classList.add('playing');
+
+            audio.src = songSrc;
+            audio.play().catch(e => {
+                statusDisplay.innerText = "Virhe toistossa.";
+            });
+            statusDisplay.innerText = "Nyt soi: " + title;
+            albumCover.style.transform = "scale(1.02)";
+            
+            // Skrollaa lista automaattisesti, jos kappale on alhaalla
+            item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        trackItems.forEach((item, index) => {
             item.addEventListener('click', function() {
-                const songSrc = this.getAttribute('data-src');
-                const title = this.innerText;
-
-                if (audio.src.includes(songSrc) && !audio.paused) {
+                if (currentTrackIndex === index && !audio.paused) {
                     audio.pause();
                     this.classList.remove('playing');
-                    statusDisplay.innerText = "Pysäytetty: " + title;
+                    statusDisplay.innerText = "Pysäytetty: " + this.innerText;
                     albumCover.style.transform = "scale(1)";
                 } else {
-                    trackItems.forEach(i => i.classList.remove('playing'));
-                    this.classList.add('playing');
-
-                    audio.src = songSrc;
-                    audio.play().catch(e => {
-                        statusDisplay.innerText = "Ladataan tiedostoa...";
-                    });
-                    statusDisplay.innerText = "Toistetaan: " + title;
-                    albumCover.style.transform = "scale(1.02)";
+                    playTrack(index);
                 }
             });
         });
 
+        // AUTOMAATTINEN SEURAAVA KAPPALE
         audio.addEventListener('ended', () => {
-            statusDisplay.innerText = "Kappale päättyi.";
-            trackItems.forEach(i => i.classList.remove('playing'));
-            albumCover.style.transform = "scale(1)";
+            let nextIndex = currentTrackIndex + 1;
+            if (nextIndex < trackItems.length) {
+                playTrack(nextIndex);
+            } else {
+                statusDisplay.innerText = "Levy loppui.";
+                trackItems.forEach(i => i.classList.remove('playing'));
+                albumCover.style.transform = "scale(1)";
+                currentTrackIndex = -1;
+            }
         });
     </script>
 </body>
