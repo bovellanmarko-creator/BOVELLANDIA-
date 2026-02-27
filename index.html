@@ -112,15 +112,21 @@
             padding-left: 15px;
         }
 
-        /* LASKURIN TYYLI */
+        /* UUSI LASKURI - DYNAAMINEN JA REAGOIVA */
         .visitor-counter {
             margin-top: 30px;
+            padding: 10px;
+            background: #000;
+            border: 1px solid #444;
+            border-radius: 4px;
             display: inline-block;
         }
 
-        .visitor-counter img {
-            height: 40px; /* Säädetty kokoa, jotta numerot näkyvät selkeästi */
+        .counter-img {
+            height: 30px;
             display: block;
+            /* Tehdään numeroista hieman kultaisempia */
+            filter: sepia(1) saturate(5) hue-rotate(-15deg);
         }
 
         .credits {
@@ -185,9 +191,7 @@
     </div>
 
     <div class="visitor-counter">
-        <a rel="nofollow" href="https://hieromo.fi">
-            <img src="https://laskuri.omasivu.fi/69cbcd4a8db61fc58099fcd4c1fdf980f002348f/laskuri.svg?stroke=ffffff&amp;fill=000000&amp;offset=0" alt="hieromo">
-        </a>
+        <img class="counter-img" src="https://profile-counter.glitch.me/bovellandia-marionetti/count.svg" alt="Visitor Count">
     </div>
 
     <div class="credits">
