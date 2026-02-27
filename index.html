@@ -102,6 +102,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 0.9rem;
         }
 
         .track-item.playing {
@@ -111,21 +112,30 @@
             padding-left: 15px;
         }
 
-        /* UUSI MINIMALISTINEN LASKURI */
+        /* LASKURI - VAIN NUMEROT */
         .visitor-counter {
-            margin-top: 40px;
-            padding: 10px 15px;
+            margin-top: 30px;
+            padding: 5px 15px;
             background: #000;
-            border: 2px solid #333;
-            border-radius: 2px;
-            display: inline-flex;
-            align-items: center;
+            border: 1px solid #333;
+            border-radius: 3px;
+            display: inline-block;
             box-shadow: inset 0 0 10px #000;
         }
 
-        .counter-digits {
-            height: 20px;
-            filter: sepia(1) saturate(5) hue-rotate(-15deg); /* Tekee numeroista kullanväriset */
+        .counter-img {
+            height: 25px;
+            filter: sepia(1) saturate(5) hue-rotate(-15deg) contrast(1.1);
+        }
+
+        .credits {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            max-width: 600px;
+            text-align: center;
+            opacity: 0.7;
+            font-style: italic;
+            line-height: 1.4;
         }
 
         #status-display {
@@ -148,7 +158,7 @@
     <audio id="audio-player"></audio>
 
     <div class="main-wrapper">
-        <div class="cover-art" id="album-cover"></div>
+        <div class="cover-art"></div>
 
         <div class="player-content">
             <h1>BOVELLANDIA</h1>
@@ -168,7 +178,7 @@
                     <li class="track-item" data-src="Toiselta_kaiken.mp3"><span>10. Toiselta kaiken</span></li>
                     <li class="track-item" data-src="Han_sateilee.mp3"><span>11. Hän säteilee</span></li>
                     <li class="track-item" data-src="Terapiaa_jazz.mp3"><span>12. Terapiaa (jazz)</span></li>
-                    <div style="font-size: 0.7rem; color: var(--gold); margin: 20px 0 5px 0;">INTERNATIONAL</div>
+                    <div style="font-size: 0.7rem; color: var(--gold); margin: 15px 0 5px 0; font-family: 'Special Elite';">INTERNATIONAL</div>
                     <li class="track-item" data-src="Lonely_Road.mp3"><span>13. Lonely Road</span></li>
                     <li class="track-item" data-src="Magical_night.mp3"><span>14. Magical night</span></li>
                 </ul>
@@ -179,14 +189,18 @@
     </div>
 
     <div class="visitor-counter">
-        <img class="counter-digits" src="https://count.getloli.com/get/@bovellanmarko-marionetti?theme=flat" alt="Visitor Counter"/>
+        <img class="counter-img" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbovellanmarko-creator.github.io%2FBOVELLANDIA-%2F&count_bg=%23000000&title_bg=%23000000&icon=&icon_color=%23E7E7E7&title=&edge_flat=true" alt="Visitor Counter"/>
+    </div>
+
+    <div class="credits">
+        Sävellykset ja sanoitukset ja sovitukset Marko Bovellan. <br>
+        Tekoälyn muusikot ja studio velhot hoitivat tuotannon ja soittamisen sekä laulut.
     </div>
 
     <script>
         const audio = document.getElementById('audio-player');
         const trackItems = document.querySelectorAll('.track-item');
         const statusDisplay = document.getElementById('status-display');
-        const albumCover = document.getElementById('album-cover');
         let currentTrackIndex = -1;
 
         function playTrack(index) {
@@ -213,7 +227,6 @@
             });
         });
 
-        // Automaattinen vaihto seuraavaan
         audio.addEventListener('ended', () => {
             if (currentTrackIndex + 1 < trackItems.length) {
                 playTrack(currentTrackIndex + 1);
