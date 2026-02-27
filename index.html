@@ -111,21 +111,21 @@
             padding-left: 15px;
         }
 
-        /* Laskuri - vain numerot */
+        /* UUSI MINIMALISTINEN LASKURI */
         .visitor-counter {
             margin-top: 40px;
-            padding: 5px;
-            border: 2px solid #333;
+            padding: 10px 15px;
             background: #000;
-            display: inline-block;
-            border-radius: 3px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,1);
+            border: 2px solid #333;
+            border-radius: 2px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: inset 0 0 10px #000;
         }
 
-        .counter-badge {
-            filter: invert(1) sepia(1) saturate(5) hue-rotate(10deg) contrast(1.2);
-            display: block;
-            height: 25px;
+        .counter-digits {
+            height: 20px;
+            filter: sepia(1) saturate(5) hue-rotate(-15deg); /* Tekee numeroista kullanväriset */
         }
 
         #status-display {
@@ -179,7 +179,7 @@
     </div>
 
     <div class="visitor-counter">
-        <img class="counter-badge" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbovellanmarko-creator.github.io%2FBOVELLANDIA-%2F&count_bg=%23000000&title_bg=%23000000&icon=&icon_color=%23E7E7E7&title=&edge_flat=true" alt="Visitor Counter"/>
+        <img class="counter-digits" src="https://count.getloli.com/get/@bovellanmarko-marionetti?theme=flat" alt="Visitor Counter"/>
     </div>
 
     <script>
@@ -213,6 +213,7 @@
             });
         });
 
+        // Automaattinen vaihto seuraavaan
         audio.addEventListener('ended', () => {
             if (currentTrackIndex + 1 < trackItems.length) {
                 playTrack(currentTrackIndex + 1);
