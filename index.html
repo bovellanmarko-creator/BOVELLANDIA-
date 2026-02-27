@@ -112,22 +112,15 @@
             padding-left: 15px;
         }
 
-        /* KORJATTU LASKURI - VAIN NUMEROT */
+        /* LASKURIN TYYLI */
         .visitor-counter {
             margin-top: 30px;
-            padding: 10px 20px;
-            background: #000;
-            border: 2px solid #333;
-            border-radius: 4px;
             display: inline-block;
-            box-shadow: inset 0 0 15px #000;
         }
 
-        .counter-img {
+        .visitor-counter img {
+            height: 40px; /* Säädetty kokoa, jotta numerot näkyvät selkeästi */
             display: block;
-            height: 35px;
-            /* Suodatin tekee numeroista hieman kullanhohtoisia */
-            filter: sepia(1) saturate(3) hue-rotate(-10deg) contrast(1.2);
         }
 
         .credits {
@@ -192,7 +185,9 @@
     </div>
 
     <div class="visitor-counter">
-        <img class="counter-img" src="https://moe-counter.glitch.me/get/@bovellandia-marko-v2?theme=rule73" alt="Visitor Count"/>
+        <a rel="nofollow" href="https://hieromo.fi">
+            <img src="https://laskuri.omasivu.fi/69cbcd4a8db61fc58099fcd4c1fdf980f002348f/laskuri.svg?stroke=ffffff&amp;fill=000000&amp;offset=0" alt="hieromo">
+        </a>
     </div>
 
     <div class="credits">
